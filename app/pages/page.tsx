@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { TrendingUp } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -10,10 +9,9 @@ import {
   Label,
   Pie,
   PieChart,
-  Tooltip,
 } from "recharts";
-import { collection, getDocs } from "firebase/firestore"; // Import Firestore functions
-import { db } from "@/Firebase"; // Adjust the import path for your Firebase config
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/Firebase";
 import {
   Card,
   CardContent,
@@ -23,7 +21,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -40,17 +37,15 @@ export default function Page() {
   >([]);
   const [loading, setLoading] = React.useState(true);
 
-  // Fetch data from Firestore
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const teachersSnapshot = await getDocs(collection(db, "teachers-atendance")); // Firestore collection for teachers
+        const teachersSnapshot = await getDocs(collection(db, "teachers-atendance"));
         setTeachersCount(teachersSnapshot.size);
 
-        const studentsSnapshot = await getDocs(collection(db, "student-atendance")); // Firestore collection for students
+        const studentsSnapshot = await getDocs(collection(db, "student-atendance"));
         setStudentsCount(studentsSnapshot.size);
 
-        // Example data for bar chart with separate counts for teachers and students
         const barData = [
           {
             month: "January",
@@ -85,17 +80,16 @@ export default function Page() {
         ];
         setBarChartData(barData);
 
-        // Example data for pie chart
         const pieData = [
           {
             category: "Teachers",
             value: teachersSnapshot.size,
-            fill: "red", // Set color to red for teachers
+            fill: "red",
           },
           {
             category: "Students",
             value: studentsSnapshot.size,
-            fill: "yellow", // Set color to yellow for students
+            fill: "yellow",
           },
         ];
         setPieChartData(pieData);
@@ -116,8 +110,7 @@ export default function Page() {
       ) : (
         <>
           <div className="flex flex-wrap gap-4 justify-center mb-4 w-full">
-            {/* Card for Teachers */}
-            <Card className="flex flex-col h-full w-[40%] ">
+            <Card className="flex flex-col h-full w-[40%]">
               <CardHeader>
                 <CardTitle>Teachers</CardTitle>
                 <CardDescription>Total Number of Teachers</CardDescription>
@@ -132,7 +125,6 @@ export default function Page() {
               </CardFooter>
             </Card>
 
-            {/* Card for Students */}
             <Card className="flex flex-col h-full w-[40%]">
               <CardHeader>
                 <CardTitle>Students</CardTitle>
@@ -155,16 +147,12 @@ export default function Page() {
                 <CardTitle>Bar Chart - Teacher and Student Data</CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
-                <ChartContainer config={{ /* Add your ChartConfig properties here */ }}>
+                <ChartContainer config={{}}>
                   <BarChart data={barChartData}>
                     <CartesianGrid vertical={false} />
                     <XAxis dataKey="month" />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent indicator="dashed" />}
-                    />
-                    <Bar dataKey="teachers" fill="red" radius={4} /> {/* Set color to red for teachers */}
-                    <Bar dataKey="students" fill="yellow" radius={4} /> {/* Set color to yellow for students */}
+                    <Bar dataKey="teachers" fill="red" radius={4} />
+                    <Bar dataKey="students" fill="yellow" radius={4} />
                   </BarChart>
                 </ChartContainer>
               </CardContent>
@@ -175,12 +163,8 @@ export default function Page() {
                 <CardTitle>Pie Chart - Distribution of Teachers and Students</CardTitle>
               </CardHeader>
               <CardContent className="flex-1 pb-0 flex-grow">
-                <ChartContainer className="mx-auto aspect-square max-h-[250px]" config={{ /* Add your ChartConfig properties here */ }}>
+                <ChartContainer className="mx-auto aspect-square max-h-[250px]" config={{}}>
                   <PieChart>
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent hideLabel />}
-                    />
                     <Pie
                       data={pieChartData}
                       dataKey="value"
